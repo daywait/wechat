@@ -1,6 +1,9 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tencent.wxcloudrun.service.GptService;
+import com.tencent.wxcloudrun.util.RestUtil;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 
@@ -14,6 +17,13 @@ public class GptServiceImpl implements GptService {
 
   @Override
   public String chat(String question) {
-    return "test";
+    JSONObject result = RestUtil.get("http://49.51.38.186:5111", JSONObject.parseObject(question));
+    return result.toString();
+  }
+
+  public HttpHeaders setHeader() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Content-Type", "application/json");
+    return headers;
   }
 }
