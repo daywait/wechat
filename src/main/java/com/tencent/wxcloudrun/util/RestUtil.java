@@ -110,6 +110,11 @@ public class RestUtil {
         return RT.exchange(url, HttpMethod.POST, entity, JSONObject.class).getBody();
     }
 
+    public static JSONObject getJson(String url, JSONObject variables, HttpHeaders headers) {
+        HttpEntity<String> entity = new HttpEntity<>(variables.toString(), headers);
+        return RT.exchange(url, HttpMethod.GET, entity, JSONObject.class).getBody();
+    }
+
     /**
      * 发送 POST 请求，返回原生 ResponseEntity 对象
      */
