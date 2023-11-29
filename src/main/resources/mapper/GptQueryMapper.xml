@@ -30,7 +30,7 @@
     </insert>
 
     <update id="updateQuery" parameterType="com.tencent.wxcloudrun.model.GptQuery">
-        UPDATE `Counters` set
+        UPDATE `GptQuery` set
             `answer` = #{answer}
         WHERE id=#{id}
     </update>
