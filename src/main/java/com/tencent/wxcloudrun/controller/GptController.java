@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dto.ChatRequest;
 import com.tencent.wxcloudrun.dto.CounterRequest;
+import com.tencent.wxcloudrun.dto.IdRequest;
 import com.tencent.wxcloudrun.model.Counter;
 import com.tencent.wxcloudrun.service.CounterService;
 import com.tencent.wxcloudrun.service.GptService;
@@ -45,10 +46,21 @@ public class GptController {
    */
   @PostMapping(value = "/gpt/chat")
   ApiResponse chat(@RequestBody ChatRequest req) {
-    logger.info("/gpt/chat get request");
-    String answer = gptService.chat(req.getQuestion());
+    logger.info("/gpt/chat begin");
+    int id = gptService.insertQuestion(req.getQuestion());
+    gptService.asyncChat(id, req.getQuestion());
+    return ApiResponse.ok(id);
+  }
 
-    return ApiResponse.ok(answer);
+  /**
+   * gpt chat
+   * @return API response json
+   */
+  @PostMapping(value = "/gpt/chat_result")
+  ApiResponse chatResult(@RequestBody IdRequest req) {
+    logger.info("/gpt/chat_result begin");
+    String result = gptService.getResult(req.getId());
+    return ApiResponse.ok(result);
   }
 
   public HttpHeaders setHeader() {

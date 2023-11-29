@@ -31,23 +31,34 @@ public class GptServiceImpl implements GptService {
   }
 
   @Override
-  public String chat(String question) {
-    asyncGetGpt(question);
-    return "ok";
-  }
-
-  @Async
-  public void asyncGetGpt(String question) {
-    JSONObject json = JsonBuilder.forObject()
-            .with("question", question).toJsonObject();
+  public Integer insertQuestion(String question) {
     GptQuery query = GptQuery.builder()
             .question(question)
             .build();
-    mapper.insertQuery(query);
+    return mapper.insertQuery(query);
+  }
+
+  @Async
+  @Override
+  public void asyncChat(Integer id, String question) {
+    JSONObject json = JsonBuilder.forObject()
+            .with("question", question).toJsonObject();
     JSONObject result = RestUtil.postJson("http://49.51.38.186:5000/gpt", json,setHeader());
-    query.setAnswer(result.getString("result"));
+    GptQuery query = GptQuery.builder()
+            .id(id)
+            .answer(result.getString("result"))
+            .build();
     mapper.updateQuery(query);
 
+  }
+
+  @Override
+  public String getResult(Integer id) {
+    GptQuery query = mapper.getQuery(id);
+    if (query.getAnswer() != null) {
+      return query.getAnswer();
+    }
+    return "";
   }
 
   public HttpHeaders setHeader() {
