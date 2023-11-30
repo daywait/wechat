@@ -39,7 +39,8 @@ public class GptServiceImpl implements GptService {
     GptQuery query = GptQuery.builder()
             .question(question)
             .build();
-    return mapper.insertQuery(query);
+    mapper.insertQuery(query);
+    return query.getId();
   }
 
   @Async

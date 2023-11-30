@@ -23,7 +23,7 @@
         limit 1
     </delete>
 
-    <insert id="insertQuery" parameterType="com.tencent.wxcloudrun.model.GptQuery" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insertQuery" parameterType="com.tencent.wxcloudrun.model.GptQuery" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO GptQuery (question)
         VALUES
             (#{question})
